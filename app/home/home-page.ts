@@ -21,6 +21,7 @@ export function onLoaded(args: any) {
 export class ViewModel extends Observable {
     public _fileName: string;
     public _isEnabled: boolean;
+    private myFile: any;    // <----- UNCOMMENT THE FIX
 
     get fileName(): string {
         return this._fileName;
@@ -44,12 +45,12 @@ export class ViewModel extends Observable {
         root.android.addView(btn);
 
         let file = new java.io.File('real file');
-        // (<any>global).myFile = file1; // <----- THE FIX
+        // this.myFile = file;             // <----- UNCOMMENT THE FIX
         btn.setOnClickListener(new android.view.View.OnClickListener(
             {
                 onClick: () => {
                     this.fileName = `${file.getName()} exists at ${new Date().toTimeString()}`;
-                    // this.fileName =`${(<any>global).myFile.getName()} exists at ${new Date().toTimeString()}`; // <----- THE FIX
+                    // this.fileName =`${this.myFile.getName()} exists at ${new Date().toTimeString()}`; // <----- UNCOMMENT THE FIX
                 }
             }
         ));
