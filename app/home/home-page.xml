@@ -1,0 +1,16 @@
+<Page class="page"
+    navigatingTo="onNavigatingTo" 
+    loaded="onLoaded"
+    xmlns="http://schemas.nativescript.org/tns.xsd">
+    
+    <ActionBar class="action-bar">
+        <Label class="action-bar-title" text="Home"></Label>
+    </ActionBar>
+
+    <StackLayout id="root">
+        <Label class="t-20" text="{{ fileName }}"></Label>
+
+        <Button text="add button with click listener" tap="{{ onAddClickListener }}" isEnabled="{{ isEnabled }}"></Button>
+        <!-- Add your page content here -->
+    </StackLayout>
+</Page>
