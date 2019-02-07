@@ -21,7 +21,7 @@ export function onLoaded(args: any) {
 export class ViewModel extends Observable {
     public _fileName: string;
     public _isEnabled: boolean;
-    private myFile: any;    // <----- UNCOMMENT THE FIX
+    private myFile: java.io.File;    // <----- UNCOMMENT THE FIX
 
     get fileName(): string {
         return this._fileName;

@@ -21,7 +21,7 @@ Find the "UNCOMMENT THE FIX" lines in `home-page.ts` and uncomment them.
 
 ## But wait, what happened? (explanation)
 
-Consider this method from our example:
+Consider this method from `home-page.ts`:
 
 ```js
 public onAddClickListener() {
@@ -49,4 +49,25 @@ If you look in `onAddClickListener()` handler in the `ViewModel`, you will see t
 
 So, the `java.io.File` instance is enclosed by the native button's `onClick` callback implementation, but with `markingMode: none` enabled the framework longer takes care of finding out that connection. When GC happens in V8 or in Android the `java.io.File` instance (or its native representation) is GC'ed. This can result in either Java or JavaScript instance missing and upon calling of the `onClick` the app crashes with any of the a.m. errors.
 
-... to be continued
+To prevent this from happening, we should make sure the `java.io.File` instance is alive as long as we need it in the app execution. In it would be enough to live as long as the ViewModel instance is alive (we don't expect we should handle button clicks when the view is dead, right?). That is why we make it a property of the `ViewModel` class:
+
+```js
+export class ViewModel extends Observable {
+...
+    private myFile: java.io.File;
+...
+```
+
+and use it in the callback implementation like:
+```js
+btn.setOnClickListener(new android.view.View.OnClickListener(
+    {
+        onClick: () => {
+            this.fileName =`${this.myFile.getName()} exists at ${new Date().toTimeString()}`;
+        }
+    }
+));
+```
+This will ensure that the GC will not collect the `java.io.File` instance unless the object that holds it (the `ViewModel` instance) is not collecteted.
+
+
